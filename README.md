@@ -1,2 +1,3 @@
 # smocba
-Matlab implementation of the "simplified MOCBA" algorithm
+
+Matlab/Octave implementation of the "simplified MOCBA" algorithm
