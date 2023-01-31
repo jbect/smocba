@@ -30,13 +30,13 @@ for j = 1:m
         end
 
         % Compute the argmax in (6.41), and save the max too
-        [trucmax(j,i), kk(j,i)] = max (truc);
+        [trucmax(i,j), kk(i,j)] = max (truc);
     end
 end
 
 % `jj` contains the (argmin) indices defined by (6.42)
 % `trucminmax` contains the associated minimal values
-[trucminmax, jj] = min (trucmax + diag (inf * ones(1, m)));
+[trucminmax, jj] = min (trucmax' + diag (inf * ones(1, m)));
 
 % `S_A` will contain the indicator vector for the set S_A in (6.43)
 S_A = true (1, m);
@@ -50,7 +50,7 @@ for h = 1:m
     % Decide if h is in S_A, according to (6.43)
     if any (Theta)
         tmp_LHS = abs (trucminmax(h));
-        tmp_RHS = min (abs (trucmax(h, Theta)));
+        tmp_RHS = min (abs (trucmax(Theta, h)));
         S_A(h) = tmp_LHS < tmp_RHS;
     end
 
@@ -68,7 +68,7 @@ alpha = nan(1, m);
 for h = 1:m
     if S_A(h)
         j = jj(h);
-        k = kk(j, h);
+        k = kk(h, j);
         alpha(h) = obj_var(h,k) / ((obj_mean(h,k) - obj_mean(j,k))^2);
     end
 end
@@ -84,7 +84,7 @@ for d = 1:m
         S = 0;
         for h = 1:m
             if ThetaStar(h)
-                k = kk(d, h);
+                k = kk(h, d);
                 S = S + obj_var(d,k) / obj_var(h,k) * alpha(h)^2;
             end
         end
